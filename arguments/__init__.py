@@ -6,9 +6,10 @@ from .command import *
 
 
 class Runner:
-	def __init__(self, description = None, show_usage = True):
+	def __init__(self, description = None, show_usage = True, prefix = '--'):
 		self._commands = {}
 		self._show_usage = show_usage
+		self._prefix = prefix
 		
 		self['help'] = (self.help, 'Show this message and exit')
 	
@@ -25,7 +26,7 @@ class Runner:
 		if command in self._commands:
 			raise Exception('Cannot add two commands with the same name: %s' % command)
 		
-		self._commands[command] = Command(method, description)
+		self._commands[command] = Command(method, description, self._prefix)
 
 	def run(self, args = None):
 		if args is None:
