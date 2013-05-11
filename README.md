@@ -1,5 +1,14 @@
-#! /bin/env python
+# Args
 
+Args is a micro framework for command line applications, Args handles the parsing of command line arguments and running the appropriate methods based on the method signatures.
+
+## Installation
+
+## Usage
+
+A basic hello world example 
+
+```python
 import arguments
 
 def default():
@@ -27,3 +36,14 @@ runner['goodbye'] = (goodbye, 'Says goodbye and exits')
 
 if __name__ == '__main__':
 	runner.run()
+```
+
+### Argument types
+
+### Built-in functionality
+
+## Future Plans
+
+* Uploading to pypi
+* Type inference of arguments.
+* Command overloading.
