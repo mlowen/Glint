@@ -25,7 +25,6 @@ class Command:
 					self.optional.append(arg)
 			else:
 				self.positional.append(arg)
-				
 	
 	def run(self, args):
 		if utils.is_none_or_empty(args):
