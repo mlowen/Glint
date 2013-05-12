@@ -13,21 +13,19 @@ class Runner:
 		
 		self['help'] = (self.help, 'Show this message and exit')
 	
+	# Accessors
+	
 	def __setitem__(self, key, value):
 		if isinstance(value, tuple):
-			self.add(key, value[0], value[1])
+			self._add(key, value[0], value[1])
 		else:
-			self.add(key, value)
+			self._add(key, value)
 
 	def __contains__(self, key):
 		return key in self._commands
-
-	def add(self, command, method, description = None):
-		if command in self._commands:
-			raise Exception('Cannot add two commands with the same name: %s' % command)
-		
-		self._commands[command] = Command(method, description, self._prefix)
-
+	
+	# Public methods
+	
 	def run(self, args = None):
 		if args is None:
 			args = sys.argv[1:]
@@ -54,11 +52,54 @@ class Runner:
 	
 	def help(self, command = None):
 		if command is not None:
-			self.command_usage(command)
+			self._command_usage(command)
 		else:
-			self.usage()
+			self._usage()
 	
-	def command_usage(self, command_name):
+	# Private methods
+	
+	def _add(self, command, method, description = None):
+		if command in self._commands:
+			raise Exception('Cannot add two commands with the same name: %s' % command)
+		
+		self._commands[command] = Command(method, description, self._prefix)
+	
+	def _print_arguments(self, title, args, max_padding):
+		print('%s:\n' % title)
+			
+		for a in args:
+			if utils.is_none_or_whitespace(a[1]):
+				print('  %s' % a[0])
+			else:
+				padding = ' ' * (max_padding - len(a[0]))
+				
+				print('  %s%s%s' % (a[0], padding, a[1]))
+		
+		print('') # Added in for padding
+	
+	def _max_padding(self, args):
+		max_padding = 0
+		
+		for a in args:
+			l = len(a)
+			max_padding = l if l > max_padding else max_padding
+					
+		return max_padding + 3
+			
+	def _usage(self, message = None):
+		commands = [c for c in self._commands if c is not None]
+		max_padding = self._max_padding(commands)
+		
+		print('%s\n' % message if not utils.is_none_or_whitespace(message) else '')
+		
+		print('usage: %s %s\n' % (sys.argv[0], '[<command>]' if None in self else '<command>'))
+		
+		if len(commands) > 0:
+			self._print_arguments('Available commands', [(c, self._commands[c].description) for c in commands], max_padding)
+			
+			print('See \'%s help --command <command>\' for help on that command.' % sys.argv[0])
+	
+	def _command_usage(self, command_name):
 		if command_name not in self._commands:
 			print('Unknown command %s, run \'%s help\' for a list of commands.' % (command_name, sys.argv[0]))
 			return
@@ -86,39 +127,4 @@ class Runner:
 		
 		if len(command.positional) > 0: self._print_arguments('Arguments', positionals, max_padding)		
 		if len(command.optional) > 0: self._print_arguments('Optional Arguments', optionals, max_padding)
-		if len(command.flags) > 0: self._print_arguments('Flag', flags, max_padding)
-		
-	def _print_arguments(self, title, args, max_padding):
-		print('%s:\n' % title)
-			
-		for a in args:
-			if utils.is_none_or_whitespace(a[1]):
-				print('  %s' % a[0])
-			else:
-				padding = ' ' * (max_padding - len(a[0]))
-				
-				print('  %s%s%s' % (a[0], padding, a[1]))
-		
-		print('') # Added in for padding
-	
-	def _max_padding(self, args):
-		max_padding = 0
-		
-		for a in args:
-			l = len(a)
-			max_padding = l if l > max_padding else max_padding
-					
-		return max_padding + 3
-			
-	def usage(self, message = None):
-		commands = [c for c in self._commands if c is not None]
-		max_padding = self._max_padding(commands)
-		
-		print('%s\n' % message if not utils.is_none_or_whitespace(message) else '')
-		
-		print('usage: %s %s\n' % (sys.argv[0], '[<command>]' if None in self else '<command>'))
-		
-		if len(commands) > 0:
-			self._print_arguments('Available commands', [(c, self._commands[c].description) for c in commands], max_padding)
-			
-			print('See \'%s help --command <command>\' for help on that command.' % sys.argv[0])
+		if len(command.flags) > 0: self._print_arguments('Flags', flags, max_padding)
