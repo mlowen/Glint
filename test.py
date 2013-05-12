@@ -8,7 +8,7 @@ def default():
 def hello(name:'The name of who to say hello to.'):
 	print('Hello %s.' % name)
 
-def goodbye(name = None, niceday = False):
+def goodbye(name:'Name of who to say good bye to.' = None, niceday:'Tell them to have a nice day.' = False):
 	msg = 'Good bye'
 	
 	if name is not None:

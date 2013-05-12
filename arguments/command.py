@@ -8,9 +8,9 @@ class Command:
 		self._prefix = prefix
 		self.description = description
 		
-		self._positional = []
-		self._optional = []
-		self._flags = []
+		self.positional = []
+		self.optional = []
+		self.flags = []
 		
 		sig = inspect.signature(self._method)
 		
@@ -20,11 +20,11 @@ class Command:
 			
 			if param.default is not inspect.Parameter.empty:
 				if isinstance(param.default, bool):
-					self._flags.append(arg)
+					self.flags.append(arg)
 				else:
-					self._optional.append(arg)
+					self.optional.append(arg)
 			else:
-				self._positional.append(arg)
+				self.positional.append(arg)
 				
 	
 	def run(self, args):
@@ -42,19 +42,19 @@ class Command:
 				if arg.startswith(self._prefix):
 					name = arg[len(self._prefix):]
 					
-					if any(name in opt[0] for opt in self._optional):
+					if any(name in opt[0] for opt in self.optional):
 						index += 1
 						
 						if index < len(args):
 							kwargs[name] = args[index]
 						else:
 							raise Exception('Optional parameter with no value specified: %s' % name)
-					elif any(name in flag[0] for flag in self._flags):
+					elif any(name in flag[0] for flag in self.flags):
 						kwargs[name] = True
 					else:
 						raise Exception('Unknown flag %s' % name)
-				elif pos_index < len(self._positional):
-					name = self._positional[pos_index][0]
+				elif pos_index < len(self.positional):
+					name = self.positional[pos_index][0]
 					
 					kwargs[name] = arg
 					positionals.append(name)
@@ -64,7 +64,7 @@ class Command:
 				index += 1
 			
 			# Check that all of the positionals have been supplied
-			for pos in self._positional:
+			for pos in self.positional:
 				if pos[0] not in positionals:
 					raise Exception('Expected value for %s was not found.' % pos[0])
 			

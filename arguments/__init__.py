@@ -58,29 +58,67 @@ class Runner:
 		else:
 			self.usage()
 	
-	def command_usage(self, command):
-		print('hello, you want to find out about %s' % command)
+	def command_usage(self, command_name):
+		if command_name not in self._commands:
+			print('Unknown command %s, run \'%s help\' for a list of commands.' % (command_name, sys.argv[0]))
+			return
+		
+		command = self._commands[command_name]
+		
+		positionals = command.positional
+		optionals = [('%s%s' % (self._prefix, o[0]), o[1]) for o in command.optional]
+		flags = [('%s%s' % (self._prefix, f[0]), f[1]) for f in command.flags]
+		
+		max_padding = self._max_padding([p[0] for p in positionals] + [o[0] for o in optionals] + [f[0] for f in flags])
+		
+		if not utils.is_none_or_whitespace(command.description):
+			print('\n%s' % command.description)
+		
+		params = (
+			sys.argv[0], 
+			command_name, 
+			' '.join(['<%s>' % p[0] for p in command.positional]), 
+			' '.join(['[%s%s <%s>]' % (self._prefix, o[0], o[0]) for o in command.optional]), 
+			' '.join(['[%s]' % f[0] for f in command.flags])
+		)
+		
+		print('\nusage: %s %s %s %s %s\n' % params)
+		
+		if len(command.positional) > 0: self._print_arguments('Arguments', positionals, max_padding)		
+		if len(command.optional) > 0: self._print_arguments('Optional Arguments', optionals, max_padding)
+		if len(command.flags) > 0: self._print_arguments('Flag', flags, max_padding)
+		
+	def _print_arguments(self, title, args, max_padding):
+		print('%s:\n' % title)
+			
+		for a in args:
+			if utils.is_none_or_whitespace(a[1]):
+				print('  %s' % a[0])
+			else:
+				padding = ' ' * (max_padding - len(a[0]))
+				
+				print('  %s%s%s' % (a[0], padding, a[1]))
+		
+		print('') # Added in for padding
 	
+	def _max_padding(self, args):
+		max_padding = 0
+		
+		for a in args:
+			l = len(a)
+			max_padding = l if l > max_padding else max_padding
+					
+		return max_padding + 3
+			
 	def usage(self, message = None):
 		commands = [c for c in self._commands if c is not None]
-		max_padding = len(max(commands)) + 3
+		max_padding = self._max_padding(commands)
 		
-		if not utils.is_none_or_whitespace(message):
-			print('%s\n' % message)
+		print('%s\n' % message if not utils.is_none_or_whitespace(message) else '')
 		
 		print('usage: %s %s\n' % (sys.argv[0], '[<command>]' if None in self else '<command>'))
 		
 		if len(commands) > 0:
-			print('Available commands:')
+			self._print_arguments('Available commands', [(c, self._commands[c].description) for c in commands], max_padding)
 			
-			for name in commands:
-				description = self._commands[name].description
-				
-				if utils.is_none_or_whitespace(description):
-					print('  %s' % name)
-				else:
-					padding = ' ' * (max_padding - len(name))
-					
-					print('  %s%s%s' % (name, padding, description))
-			
-			print('\nSee \'%s help <command>\' for help on that command.' % sys.argv[0])
+			print('See \'%s help --command <command>\' for help on that command.' % sys.argv[0])
