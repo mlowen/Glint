@@ -3,7 +3,7 @@
 import arguments
 
 def default():
-	print('This is the default argument.')
+	print('This is the default action.')
 
 def hello(name:'The name of who to say hello to.'):
 	print('Hello %s.' % name)
