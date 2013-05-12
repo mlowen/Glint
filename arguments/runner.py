@@ -33,19 +33,24 @@ class Runner:
 			if None in self:
 				command = self._commands[None]
 			else:
-				self.usage('No command specified.')
+				self._usage('No command specified.')
 				return	
 		else:
 			name = args[0]
 			
 			if name not in self._commands:
-				self.usage('Unknown command \'%s\'.' % name)
+				self._usage('Unknown command \'%s\'.' % name)
 				return
 				
 			command = self._commands[name]
 		
 		if command is not None:
-			command.run(args[1:])
+			try:
+				command.run(args[1:])
+			except InvalidCommandException as e:
+				print(e.message)
+				
+				print('\nFor correct usage for command see: %s help --command %s' % (sys.argv[0], name))
 	
 	def help(self, command = None):
 		if command is not None:
@@ -104,7 +109,7 @@ class Runner:
 		command = self._commands[command_name]
 		
 		positionals = command.positional
-		optionals = [('%s%s' % (self._prefix, o[0]), o[1]) for o in command.optional]
+		optionals = [('%s%s <%s>' % (self._prefix, o[0], o[0]), o[1]) for o in command.optional]
 		flags = [('%s%s' % (self._prefix, f[0]), f[1]) for f in command.flags]
 		
 		max_padding = self._max_padding([p[0] for p in positionals] + [o[0] for o in optionals] + [f[0] for f in flags])
@@ -115,9 +120,9 @@ class Runner:
 		params = (
 			sys.argv[0], 
 			command_name, 
-			' '.join(['<%s>' % p[0] for p in command.positional]), 
-			' '.join(['[%s%s <%s>]' % (self._prefix, o[0], o[0]) for o in command.optional]), 
-			' '.join(['[%s]' % f[0] for f in command.flags])
+			' '.join(['<%s>' % p[0] for p in positionals]), 
+			' '.join(['[%s]' % o[0] for o in optionals]), 
+			' '.join(['[%s]' % f[0] for f in flags])
 		)
 		
 		print('\nusage: %s %s %s %s %s\n' % params)

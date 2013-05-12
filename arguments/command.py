@@ -2,6 +2,12 @@ import inspect
 
 from . import utils
 
+class InvalidCommandException(Exception):
+	def __init__(self, message):
+		Exception.__init__(self)
+		
+		self.message = message
+
 class Command:
 	def __init__(self, method, description, prefix):
 		self._method = method
@@ -47,18 +53,18 @@ class Command:
 						if index < len(args):
 							kwargs[name] = args[index]
 						else:
-							raise Exception('Optional parameter with no value specified: %s' % name)
+							raise InvalidCommandException('Optional parameter with no value specified: %s%s' % (self._prefix, name))
 					elif any(name in flag[0] for flag in self.flags):
 						kwargs[name] = True
 					else:
-						raise Exception('Unknown flag %s' % name)
+						raise InvalidCommandException('Unknown flag %s%s' % (self._prefix, name))
 				elif pos_index < len(self.positional):
 					name = self.positional[pos_index][0]
 					
 					kwargs[name] = arg
 					positionals.append(name)
 				else:
-					raise Exception('Unexpected parameter %s' % arg)
+					raise InvalidCommandException('Unexpected parameter %s' % arg)
 				
 				index += 1
 			
