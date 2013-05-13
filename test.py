@@ -1,6 +1,6 @@
 #! /bin/env python
 
-import arguments
+import glint
 
 def default():
 	print('This is the default action.')
@@ -19,7 +19,7 @@ def goodbye(name:'Name of who to say good bye to.' = None, niceday:'Tell them to
 	
 	print(msg)
 
-runner = arguments.Runner()
+runner = glint.Runner()
 
 runner[None] = default
 runner['hello'] = (hello, 'Says hello and exits.')

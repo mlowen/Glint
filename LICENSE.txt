@@ -1,4 +1,4 @@
-Args is available under the MIT license which is as follows:
+Glint is available under the MIT license which is as follows:
 
 Copyright (c) 2013 Michael Lowen
 
