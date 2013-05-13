@@ -54,7 +54,7 @@ A basic hello world example
 **test.py**
 
 ```python
-import arguments
+import glint
 
 def default():
 	print('This is the default argument.')
@@ -73,7 +73,7 @@ def goodbye(name = None, niceday = False):
 	
 	print(msg)
 
-runner = arguments.Runner()
+runner = glint.Runner()
 
 runner[None] = default
 runner['hello'] = (hello, 'Says hello and exits.')
