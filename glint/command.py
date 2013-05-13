@@ -63,6 +63,7 @@ class Command:
 					
 					kwargs[name] = arg
 					positionals.append(name)
+					pos_index += 1
 				else:
 					raise InvalidCommandException('Unexpected parameter %s' % arg)
 				

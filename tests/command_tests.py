@@ -2,11 +2,12 @@ from nose.tools import *
 from glint.command import *
 
 # test single positional
-def single_positional_handler(test):
+
+def single_positional_argument_handler(test):
 	assert_equal('test', test)
 
-def single_positional_test():
-	command = Command(single_positional_handler, '', '--')
+def single_positional_argument_test():
+	command = Command(single_positional_argument_handler, '', '--')
 	
 	assert_equal(1, len(command.positional))
 	assert_equal(0, len(command.optional))
@@ -15,6 +16,19 @@ def single_positional_test():
 	command.run(['test'])
 
 # test two positional
+
+def two_positional_arguments_handler(a, b):
+	assert_equal('foo', a)
+	assert_equal('bar', b)
+
+def two_positional_arguments_test():
+	command = Command(two_positional_arguments_handler, '', '--')
+	
+	assert_equal(2, len(command.positional))
+	assert_equal(0, len(command.optional))
+	assert_equal(0, len(command.flags))
+	
+	command.run(['foo', 'bar'])
 
 # test no positional supplied
 
