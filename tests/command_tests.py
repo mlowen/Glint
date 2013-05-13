@@ -32,7 +32,17 @@ def two_positional_arguments_test():
 
 # test no positional supplied
 
+def missing_positional_argument_test():
+	command = Command(single_positional_argument_handler, '', '--')
+	
+	assert_raises(InvalidCommandException, command.run, [])
+
 # test unexpected positional
+
+def extra_positional_argument_test():
+	command = Command(single_positional_argument_handler, '', '--')
+	
+	assert_raises(InvalidCommandException, command.run, ['foo', 'bar'])
 
 # test optional
 

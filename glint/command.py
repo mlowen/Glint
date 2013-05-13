@@ -33,45 +33,40 @@ class Command:
 				self.positional.append(arg)
 	
 	def run(self, args):
-		if utils.is_none_or_empty(args):
-			res = self._method()
-		else:
-			kwargs = {}
-			positionals = []
-			index = 0
-			pos_index = 0
+		kwargs = {}
+		index = 0
+		pos_index = 0
+		
+		while index < len(args):
+			arg = args[index]
 			
-			while index < len(args):
-				arg = args[index]
+			if arg.startswith(self._prefix):
+				name = arg[len(self._prefix):]
 				
-				if arg.startswith(self._prefix):
-					name = arg[len(self._prefix):]
+				if any(name in opt[0] for opt in self.optional):
+					index += 1
 					
-					if any(name in opt[0] for opt in self.optional):
-						index += 1
-						
-						if index < len(args):
-							kwargs[name] = args[index]
-						else:
-							raise InvalidCommandException('Optional parameter with no value specified: %s%s' % (self._prefix, name))
-					elif any(name in flag[0] for flag in self.flags):
-						kwargs[name] = True
+					if index < len(args):
+						kwargs[name] = args[index]
 					else:
-						raise InvalidCommandException('Unknown flag %s%s' % (self._prefix, name))
-				elif pos_index < len(self.positional):
-					name = self.positional[pos_index][0]
-					
-					kwargs[name] = arg
-					positionals.append(name)
-					pos_index += 1
+						raise InvalidCommandException('Optional parameter with no value specified: %s%s' % (self._prefix, name))
+				elif any(name in flag[0] for flag in self.flags):
+					kwargs[name] = True
 				else:
-					raise InvalidCommandException('Unexpected parameter %s' % arg)
+					raise InvalidCommandException('Unknown flag %s%s' % (self._prefix, name))
+			elif pos_index < len(self.positional):
+				name = self.positional[pos_index][0]
 				
-				index += 1
+				kwargs[name] = arg
+				pos_index += 1
+			else:
+				raise InvalidCommandException('Unexpected parameter %s' % arg)
 			
-			# Check that all of the positionals have been supplied
-			for pos in self.positional:
-				if pos[0] not in positionals:
-					raise Exception('Expected value for %s was not found.' % pos[0])
-			
-			res = self._method(**kwargs)
+			index += 1
+		
+		# Check that all of the positionals have been supplied
+		for pos in self.positional:
+			if pos[0] not in kwargs:
+				raise InvalidCommandException('Expected value for %s was not found.' % pos[0])
+		
+		res = self._method(**kwargs)
