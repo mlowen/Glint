@@ -136,8 +136,6 @@ See './test.py help --command <command>' for help on that command.
 
 ## Future Plans
 
-* Finalise naming.
-* Tests.
 * Uploading to pypi.
 * Type inference of arguments.
 * Command overloading.

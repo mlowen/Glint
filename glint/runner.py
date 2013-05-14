@@ -21,6 +21,9 @@ class Runner:
 	def __contains__(self, key):
 		return key in self._commands
 	
+	def __len__(self):
+		return len(self._commands)
+	
 	# Public methods
 	
 	def run(self, args = None):
