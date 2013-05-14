@@ -82,6 +82,21 @@ def optional_and_positional_paramenters_test():
 
 	command.run(['foo', '--b', 'bar'])
 
+# test optional between two positionals
+def optional_between_two_positional_parameters_handler(a, b, c = None):
+	assert_equal('foo', a)
+	assert_equal('bar', b)
+	assert_equal('tar', c)
+
+def optional_between_two_positional_parameters_test():
+	command = Command(optional_between_two_positional_parameters_handler, '', '--')
+	
+	assert_equal(2, len(command.positional))
+	assert_equal(1, len(command.optional))
+	assert_equal(0, len(command.flags))
+	
+	command.run(['foo', '--c', 'tar', 'bar'])
+
 # test optional before positional
 def optional_before_positional_paramenters_test():
 	command = Command(optional_and_positional_parameters_handler, '', '--')
@@ -152,14 +167,119 @@ def flag_before_positional_parameter_test():
 
 # test positional with unspecified flag
 
-# test flag and optional
+def positional_with_unspecified_flag_handler(a, b = False):
+	assert_equal('foo', a)
+	assert_false(b)
 
-# test flag and optional and positional
+def positional_with_unspecified_flag_test():
+	command = Command(positional_with_unspecified_flag_handler, '', '--')
+	
+	command.run(['foo'])
 
+# test flag between two positional parameters
+
+def flag_between_two_positional_parameters_handler(a, b, c = False):
+	assert_equal('foo', a)
+	assert_equal('bar', b)
+	assert_true(c)
+
+def flag_between_two_positional_parameters_test():
+	command = Command(flag_between_two_positional_parameters_handler, '', '--')
+	
+	assert_equal(2, len(command.positional))
+	assert_equal(0, len(command.optional))
+	assert_equal(1, len(command.flags))
+
+	command.run(['foo', '--c', 'bar'])
+
+# test flag and optional parameter
+
+def flag_and_optional_parameter_handler(a = None, b = False):
+	assert_equal('foo', a)
+	assert_true(b)
+
+def flag_and_optional_parameter_test():
+	command = Command(flag_and_optional_parameter_handler, '', '--')
+	
+	command.run(['--a', 'foo', '--b'])
+
+# test flag and unspecified optional parameter
+
+def flag_and_unspecified_optional_parameter_handler(a = None, b = False):
+	assert_is_none(a)
+	assert_true(b)
+
+def flag_and_unspecified_optional_parameter_test():
+	command = Command(flag_and_unspecified_optional_parameter_handler, '', '--')
+	
+	command.run(['--b'])
+
+# test optional parameter with unspecified flag
+
+def optional_parameter_and_unspecified_flag_handler(a = None, b = False):
+	assert_equal('foo', a)
+	assert_false(b)
+
+def optional_parameter_and_unspecified_flag_test():
+	command = Command(optional_parameter_and_unspecified_flag_handler, '', '--')
+	
+	command.run(['--a', 'foo'])
+
+# test flag and optional and positional parameters
+
+def flag_optional_and_positional_parameters_handler(a, b = None, c = False):
+	assert_equal('foo', a)
+	assert_equal('bar', b)
+	assert_true(c)
+
+def flag_optional_and_positional_parameters_test():
+	command = Command(flag_optional_and_positional_parameters_handler, '', '--')
+	
+	assert_equal(1, len(command.positional))
+	assert_equal(1, len(command.optional))
+	assert_equal(1, len(command.flags))	
+	
+	command.run(['foo', '--b', 'bar', '--c'])
+	
 # test optional and positional and unspecfied flag
 
-# test optional and flag and uspecified positional
+def optional_and_positional_parameters_with_unspecified_flag_handler(a, b = None, c = False):
+	assert_equal('foo', a)
+	assert_equal('bar', b)
+	assert_false(c)
 
-# test optional and uspecified flag and positional
+def optional_and_positional_parameters_with_unspecified_flag_test():
+	command = Command(optional_and_positional_parameters_with_unspecified_flag_handler, '', '--')
+		
+	command.run(['foo', '--b', 'bar'])
+
+# test positional and flag and uspecified optional
+
+def flag_and_positional_parameter_with_unspecified_optional_parameter_handler(a, b = None, c = False):
+	assert_equal('foo', a)
+	assert_is_none(b)
+	assert_true(c)
+
+def flag_and_positional_parameter_with_unspecified_optional_parameter_test():
+	command = Command(flag_and_positional_parameter_with_unspecified_optional_parameter_handler, '', '--')
+		
+	command.run(['foo', '--c'])
+
+# test positional with uspecified optional and flag
+
+def positional_parameter_with_unspecified_optional_parameter_and_flag_handler(a, b = None, c = False):
+	assert_equal('foo', a)
+	assert_is_none(b)
+	assert_false(c)
+
+def positional_parameter_with_unspecified_optional_parameter_and_flag_test():
+	command = Command(positional_parameter_with_unspecified_optional_parameter_and_flag_handler, '', '--')
+		
+	command.run(['foo'])
 
 # test unknown flag
+
+def unknown_flag_test():
+	command = Command(single_positional_argument_handler, '', '--')
+	
+	assert_raises(InvalidCommandException, command.run, [ '--unknown' ])
