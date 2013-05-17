@@ -45,8 +45,16 @@ def add_handler_with_description_test():
 	assert_equal('testing', runner._commands['test'].description)
 
 # Add handler that is not a method
+@raises(glint.InvalidHandlerException)
+def add_handler_that_is_not_a_method_test():
+	runner = glint.Runner()
+	runner['test'] = 'foo'
 
 # Add handler with description that is not a method
+@raises(glint.InvalidHandlerException)
+def add_handler_with_description_that_is_not_a_method_test():
+	runner = glint.Runner()
+	runner['test'] = ('foo', 'bar')
 
 # Add handler with different prefix
 

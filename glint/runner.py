@@ -1,6 +1,12 @@
 import sys
+import inspect
+
 
 from .command import *
+
+class InvalidHandlerException(Exception):
+	def __init__(self):
+		Exception.__init__(self)
 
 class Runner:
 	def __init__(self, description = None, show_usage = True, prefix = '--'):
@@ -68,6 +74,8 @@ class Runner:
 	def _add(self, command, method, description = None):
 		if command in self._commands:
 			raise Exception('Cannot add two commands with the same name: %s' % command)
+		elif not inspect.isroutine(method):
+			raise InvalidHandlerException() 
 		
 		self._commands[command] = Command(method, description, self._prefix)
 	
