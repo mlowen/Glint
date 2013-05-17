@@ -5,10 +5,12 @@ from .command import *
 class Runner:
 	def __init__(self, description = None, show_usage = True, prefix = '--'):
 		self._commands = {}
+		self._description = description
 		self._show_usage = show_usage
 		self._prefix = prefix
 		
-		self['help'] = (self.help, 'Show this message and exit')
+		if show_usage:
+			self['help'] = (self.help, 'Show this message and exit')
 	
 	# Accessors
 	
