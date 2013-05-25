@@ -88,14 +88,56 @@ def add_multiple_handlers_with_same_name_test():
 	runner['test'] = test_handler
 
 # Check length
+def length_test():
+	runner = glint.Runner()
+	assert_equal(1, len(runner))
+	
+	runner[None] = default_handler
+	assert_equal(2, len(runner))
+	
+	runner['test'] = test_handler
+	assert_equal(3, len(runner))
 
 # Check contains
-
-# Return usage 
-
-# Run correct handler
+def contains_test():
+	runner = glint.Runner()
+	
+	runner[None] = default_handler
+	runner['test'] = test_handler
+	
+	assert_true('help' in runner)
+	assert_true(None in runner)
+	assert_true('test' in runner)
 
 # Run default handler
+def run_default_handler_test():
+	handler_run = None
+	
+	runner = glint.Runner()
+	
+	runner[None] = default_handler
+	runner['test'] = test_handler
+	
+	runner.run([])
+	
+	assert_true('default', handler_run)
+
+# Run correct handler
+def run_correct_handler_test():
+	handler_run = None
+	
+	runner = glint.Runner()
+	
+	runner[None] = default_handler
+	runner['test'] = test_handler
+	
+	runner.run(['test'])
+	
+	assert_true('test', handler_run)	
+
+# Return none when show_usage is true
+
+# Return usage when show_usage is false
 
 # Exception when unable to find handler and show usage is false
 

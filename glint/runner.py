@@ -1,8 +1,9 @@
 import sys
 import inspect
 
-
 from .command import *
+
+# Exceptions
 
 class InvalidHandlerException(Exception):
 	def __init__(self):
@@ -13,6 +14,8 @@ class CommandExistsException(Exception):
 		Exception.__init__(self)
 		
 		self.message = message
+
+# Functionality
 
 class Runner:
 	def __init__(self, description = None, show_usage = True, prefix = '--'):
