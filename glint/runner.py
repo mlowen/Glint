@@ -86,8 +86,10 @@ class Runner:
 			try:
 				command.run(args[1:])
 			except InvalidCommandException as e:
-				print(e.message)
+				if not self._show_usage:
+					raise e
 				
+				print(e.message)
 				print('\nFor correct usage for command see: %s help --command %s' % (sys.argv[0], name))
 	
 	def help(self, command = None):

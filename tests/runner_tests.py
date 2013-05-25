@@ -11,6 +11,9 @@ def default_handler():
 def test_handler():
 	handler_run = 'test'
 
+def argument_handler(foo):
+	handler_run = 'foo'
+
 # Create with defaults
 def create_with_defaults_test():
 	runner = glint.Runner()
@@ -148,8 +151,23 @@ def return_usage_when_show_usage_is_false_test():
 	help = runner.help()
 	
 	assert_is_not_none(help)
-	
 
 # Exception when unable to find handler and show usage is false
+@raises(glint.UnknownCommandException)
+def exception_when_unable_to_find_handler_and_show_usage_is_false_test():
+	runner = glint.Runner(show_usage = False)
+	runner.run(['test'])
 
-# Exception when bad parameters are passed to command and show usage is false
+# Exception when no command specified and no default handler specified.
+@raises(glint.NoCommandException)
+def exception_when_no_command_specified_and_no_default_handler_test():
+	runner = glint.Runner(show_usage = False)
+	runner.run([])
+
+# Exception when not enough parameters passed to command and show usage is false
+@raises(glint.InvalidCommandException)
+def exception_when_not_enough_parameters_passed_to_command_test():
+	runner = glint.Runner(show_usage = False)
+	runner['test'] = argument_handler
+	
+	runner.run(['test'])
