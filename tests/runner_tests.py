@@ -8,6 +8,9 @@ handler_run = None
 def default_handler():
 	handler_run = 'default'
 
+def test_handler():
+	handler_run = 'test'
+
 # Create with defaults
 def create_with_defaults_test():
 	runner = glint.Runner()
@@ -57,8 +60,32 @@ def add_handler_with_description_that_is_not_a_method_test():
 	runner['test'] = ('foo', 'bar')
 
 # Add handler with different prefix
+def add_handler_with_different_prefix_test():
+	runner = glint.Runner(prefix = '+')
+	runner[None] = default_handler
+	
+	for c in runner._commands:
+		assert_equal('+', runner._commands[c]._prefix)
 
 # Add multiple handlers
+def add_multiple_handlers_test():
+	runner = glint.Runner()
+	runner[None] = default_handler
+	runner['test'] = test_handler
+	
+	assert_equal(3, len(runner._commands))
+	
+	assert_true(None in runner._commands)
+	assert_equal(default_handler, runner._commands[None]._method)
+	
+	assert_true('test' in runner._commands)
+	assert_equal(test_handler, runner._commands['test']._method)
+	
+@raises(glint.CommandExistsException)
+def add_multiple_handlers_with_same_name_test():
+	runner = glint.Runner()
+	runner['test'] = default_handler
+	runner['test'] = test_handler
 
 # Check length
 
