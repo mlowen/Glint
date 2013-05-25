@@ -1,6 +1,7 @@
 import inspect
 
 from . import utils
+from .usage import Usage
 
 class InvalidCommandException(Exception):
 	def __init__(self, message):
@@ -70,3 +71,13 @@ class Command:
 				raise InvalidCommandException('Expected value for %s was not found.' % pos[0])
 		
 		res = self._method(**kwargs)
+		
+	def usage(self):
+		usage = Usage(self._prefix)
+		usage.description = self.description
+		
+		for p in self.positional: usage.add_positional_argument(p[0], p[1])
+		for o in self.optional: usage.add_optional_argument(o[0], o[1])
+		for f in self.flags: usage.add_flag(f[0], f[1])
+		
+		return usage
