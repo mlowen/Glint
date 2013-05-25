@@ -136,8 +136,19 @@ def run_correct_handler_test():
 	assert_true('test', handler_run)	
 
 # Return none when show_usage is true
+def return_none_when_show_usage_true_test():
+	runner = glint.Runner()
+	
+	assert_is_none(runner.help())
 
 # Return usage when show_usage is false
+def return_usage_when_show_usage_is_false_test():
+	runner = glint.Runner(show_usage = False)
+	
+	help = runner.help()
+	
+	assert_is_not_none(help)
+	
 
 # Exception when unable to find handler and show usage is false
 

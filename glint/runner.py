@@ -2,6 +2,7 @@ import sys
 import inspect
 
 from .command import *
+from .usage import *
 
 # Exceptions
 
@@ -76,7 +77,7 @@ class Runner:
 		if command is not None:
 			self._command_usage(command)
 		else:
-			self._usage()
+			return self._usage()
 	
 	# Private methods
 	
@@ -111,17 +112,21 @@ class Runner:
 		return max_padding + 3
 			
 	def _usage(self, message = None):
-		commands = [c for c in self._commands if c is not None]
-		max_padding = self._max_padding(commands)
+		usage = Usage(self._prefix)
 		
-		print('%s\n' % message if not utils.is_none_or_whitespace(message) else '')
+		usage.has_default = None in self
+		usage.has_help = self._show_usage
 		
-		print('usage: %s %s\n' % (sys.argv[0], '[<command>]' if None in self else '<command>'))
+		for cmd in [c for c in self._commands if c is not None]:
+			usage.add_command(cmd, self._commands[cmd].description)
 		
-		if len(commands) > 0:
-			self._print_arguments('Available commands', [(c, self._commands[c].description) for c in commands], max_padding)
+		if self._show_usage:
+			print('%s\n' % message if not utils.is_none_or_whitespace(message) else '')
+			print(usage)
+		else:
+			return usage
 			
-			print('See \'%s help --command <command>\' for help on that command.' % sys.argv[0])
+		return None
 	
 	def _command_usage(self, command_name):
 		if command_name not in self._commands:
