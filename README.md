@@ -1,4 +1,5 @@
 # Glint
+[![Build Status](https://travis-ci.org/mlowen/Glint.png?branch=master)](https://travis-ci.org/mlowen/Glint)
 
 Glint is a micro framework for command line applications, it creates the needed parameters that should be passed to the application based on the message signatures that it is supplied.
 
