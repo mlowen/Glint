@@ -10,6 +10,10 @@ The inspiration for Glint came from wanting to have a command driven cli app sim
 
 Currently the only way to use Glint is to download it and add it to your project. In the future once there is some tests setup and the naming and conventions of the framework is finalised then the setup will be modified to use distribute and possibly upload to [pypi](https://pypi.python.org/pypi). 
 
+## Requirements
+
+Glint requires Python 3.3 to run, it has no dependencies outside of Python.
+
 ## Documentation
 
 ### arguments.Runner

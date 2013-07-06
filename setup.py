@@ -13,7 +13,7 @@ setup(
 		'Operating System :: OS Independent',
 		'License :: OSI Approved :: MIT License',
 		'Environment :: Console',
-		'Programming Language :: Python :: 3',
+		'Programming Language :: Python :: 3.3',
 		'Topic :: Software Development :: Libraries :: Application Frameworks'
 	],
 	author = glint.__author__,
