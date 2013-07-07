@@ -23,8 +23,8 @@ you need to run the following command from the base directory: ::
 At some point we will be submitting to `the Python Package Index <https://pypi.python.org/pypi>`_ once that is done then it will be the preferred 
 method to retreive and install Glint.
 
-Quickstart
-==========
+Quick start
+===========
 
 The smallest working example is the example.py script below ::
 
@@ -57,3 +57,16 @@ Running the hello command that is defined in the example looks like ``./example.
 	Hello World.
 
 For a more comprehensive look see the usage page.
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+.. toctree::
+	:maxdepth: 2
+	:hidden:
+	
+	usage
