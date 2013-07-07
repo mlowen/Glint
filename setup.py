@@ -20,7 +20,7 @@ setup(
 	author_email = glint.__author_email__,
 	url = glint.__homepage__,
 	license = glint.__license__,
-	packages = find_packages(exclude = [ 'tests', 'examples' ]),
+	packages = find_packages(exclude = [ 'docs', 'examples', 'tests' ]),
 	test_suite = 'nose.collector',
 	tests_require = [ 'nose' ],
 	zip_safe = False,
