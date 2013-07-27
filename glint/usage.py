@@ -23,9 +23,7 @@ class Usage:
 	def add_positional_argument(self, name, description):
 		self._positional_arguments.append((name, description))
 	
-	def add_optional_argument(self, name, description):
-		print('Adding optional argument: %s' % name)
-		
+	def add_optional_argument(self, name, description):		
 		self._optional_arguments.append(('%s%s' % (self._prefix, name), description, name))
 	
 	def add_flag(self, name, description):

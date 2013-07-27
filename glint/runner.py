@@ -36,7 +36,7 @@ class Runner:
 		self._prefix = prefix
 		
 		if show_usage:
-			self['help'] = (self.help, 'Show this message and exit')
+			self['help'] = (self.help, 'Show this message and exit.')
 	
 	# Accessors
 	
@@ -102,7 +102,7 @@ class Runner:
 	
 	def _add(self, command, method, description = None):
 		if command in self._commands:
-			raise CommandExistsException('Cannot add two commands with the same name: %s' % command)
+			raise CommandExistsException('Cannot add two commands with the same name: %s.' % command)
 		elif not inspect.isroutine(method):
 			raise InvalidHandlerException() 
 		
