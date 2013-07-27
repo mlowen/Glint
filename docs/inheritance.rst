@@ -1,0 +1,7 @@
+Inheritance
+===========
+
+.. toctree::
+	:hidden:
+	
+	api

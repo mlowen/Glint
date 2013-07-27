@@ -50,7 +50,7 @@ information that it has about the available commands that can be run, to view th
 	  help    Show this message and exit
 	  hello
 
-	See './glint-example.py help --command <command>' for help on that command.
+	See './example.py help --command <command>' for help on that command.
 
 Running the hello command that is defined in the example looks like ``./example.py hello`` which produces the following expected output ::
 
@@ -66,7 +66,6 @@ Indices and tables
 * :ref:`search`
 
 .. toctree::
-	:maxdepth: 2
 	:hidden:
 	
-	usage
+	commands
