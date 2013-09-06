@@ -74,7 +74,7 @@ def optional_parameter_with_equals_and_extra_positional_parameter_test():
 	assert_equal(1, len(command.optional))
 	assert_equal(0, len(command.flags))
 
-	command.run(['--a=foo', 'bar'])
+	assert_raises(InvalidCommandException, command.run, ['--a=foo', 'bar'])
 
 # test optional not supplied
 

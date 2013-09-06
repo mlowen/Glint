@@ -43,8 +43,11 @@ class Command:
 			
 			if arg.startswith(self._prefix):
 				name = arg[len(self._prefix):]
+				equals_pos = name.find('=')
 				
-				if any(name in opt[0] for opt in self.optional):
+				if equals_pos >= 0 and any(name[:equals_pos] in opt[0] for opt in self.optional):
+					kwargs[name[:equals_pos]] = name[(equals_pos + 1):]
+				elif any(name in opt[0] for opt in self.optional):
 					index += 1
 					
 					if index < len(args):
