@@ -58,6 +58,24 @@ def optional_parameter_test():
 
 	command.run(['--a', 'foo'])
 
+def optional_parameter_with_equals_test():
+	command = Command(optional_parameter_handler, '', '--')
+
+	assert_equal(0, len(command.positional))
+	assert_equal(1, len(command.optional))
+	assert_equal(0, len(command.flags))
+
+	command.run(['--a=foo'])
+
+def optional_parameter_with_equals_and_extra_positional_parameter_test():
+	command = Command(optional_parameter_handler, '', '--')
+
+	assert_equal(0, len(command.positional))
+	assert_equal(1, len(command.optional))
+	assert_equal(0, len(command.flags))
+
+	command.run(['--a=foo', 'bar'])
+
 # test optional not supplied
 
 def optional_parameter_not_supplied_handler(a = None):
