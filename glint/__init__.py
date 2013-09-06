@@ -4,7 +4,7 @@ from . import usage
 
 from .runner import *
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __name__ = 'Glint'
 __description__ = 'Command line application micro-framework.'
 __author__ = 'Mike Lowen'
