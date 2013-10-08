@@ -79,7 +79,7 @@ def optional_parameter_with_equals_and_extra_positional_parameter_test():
 # Test optional argument replacing a '-' with a '_'
 
 def optional_parameter_replace_dash_handler(a_b = None):
-	assert_equal('foo', a)
+	assert_equal('foo', a_b)
 
 def optional_parameter_replace_dash_test():
 	command = Command(optional_parameter_replace_dash_handler, '', '--')
