@@ -3,6 +3,7 @@
 ## v0.2.0 - In development
 
 * Updated the argument parsing to allow optional arguments in the format of <prefix><name>=<value>
+* Updated the argument parsing to replace - characters with _ when parsing positional arguments and flags.
 
 ## v0.1.0 - 2013-07-29
 
