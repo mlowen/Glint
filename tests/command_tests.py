@@ -76,6 +76,16 @@ def optional_parameter_with_equals_and_extra_positional_parameter_test():
 
 	assert_raises(InvalidCommandException, command.run, ['--a=foo', 'bar'])
 
+# Test optional argument replacing a '-' with a '_'
+
+def optional_parameter_replace_dash_handler(a_b = None):
+	assert_equal('foo', a)
+
+def optional_parameter_replace_dash_test():
+	command = Command(optional_parameter_replace_dash_handler, '', '--')
+
+	command.run(['--a-b', 'foo'])
+
 # test optional not supplied
 
 def optional_parameter_not_supplied_handler(a = None):
@@ -180,6 +190,16 @@ def flag_not_supplied_handler(a = False):
 def flag_not_supplied_test():
 	command = Command(flag_not_supplied_handler, '', '--')
 	command.run([])
+
+# Test optional argument replacing a '-' with a '_'
+
+def flag_replace_dash_handler(a_b = False):
+	assert_true(a_b)
+
+def flag_replace_dash_test():
+	command = Command(flag_replace_dash_handler, '', '--')
+
+	command.run(['--a-b'])
 
 # test flag and positional
 def flag_and_positional_parameter_handler(a, b = False):
