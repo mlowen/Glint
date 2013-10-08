@@ -26,6 +26,8 @@ class Command:
 			arg = (name, param.annotation if param.annotation is not inspect.Parameter.empty else None)
 			
 			if param.default is not inspect.Parameter.empty:
+				arg = (arg[0].replace('_', '-'), arg[1])
+				
 				if isinstance(param.default, bool):
 					self.flags.append(arg)
 				else:
@@ -43,16 +45,19 @@ class Command:
 			
 			if arg.startswith(self._prefix):
 				name = arg[len(self._prefix):]
+				equals_pos = name.find('=')
 				
-				if any(name in opt[0] for opt in self.optional):
+				if equals_pos >= 0 and any(name[:equals_pos] in opt[0] for opt in self.optional):
+					kwargs[name[:equals_pos].replace('-', '_')] = name[(equals_pos + 1):]
+				elif any(name in opt[0] for opt in self.optional):
 					index += 1
 					
 					if index < len(args):
-						kwargs[name] = args[index]
+						kwargs[name.replace('-', '_')] = args[index]
 					else:
 						raise InvalidCommandException('Optional parameter with no value specified: %s%s' % (self._prefix, name))
 				elif any(name in flag[0] for flag in self.flags):
-					kwargs[name] = True
+					kwargs[name.replace('-', '_')] = True
 				else:
 					raise InvalidCommandException('Unknown flag %s%s' % (self._prefix, name))
 			elif pos_index < len(self.positional):
