@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.2.0 - In development
+## v0.2.0 - 2013-10-08
 
 * Updated the argument parsing to allow optional arguments in the format of <prefix><name>=<value>
 * Updated the argument parsing to replace - characters with _ when parsing positional arguments and flags.
